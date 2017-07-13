@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use Illuminate\Http\Request;
+use Image;
+use Storage;
 
 class EventsController extends Controller
 {
@@ -14,7 +16,8 @@ class EventsController extends Controller
      */
     public function index()
     {
-        return view('event.index');
+        $events = Event::latest('id')->paginate(6);
+        return view('event.index', compact(['events']));
     }
 
     /**
@@ -37,15 +40,38 @@ class EventsController extends Controller
     {
         $this->validate($request,[
           'title' => 'required|min:3|max:255',
-          'description' => 'max:225',
-          'artists' => 'max:255',
+          'description' => 'max:1000',
           'location' => 'max:255',
-          'ticket' =>'max:11',
-          'host' => 'max:225',
-          'date' => 'max:150',
+          'ticket' =>'max:50',
+          'date' => 'max:11',
           'slug' => 'required|unique:posts,slug|alpha_dash|max:100',
           'event_image' => 'mimes:jpeg,png,jpg|max:1999',
         ]);
+
+        $events = new Event;
+
+        $events->title = $request->title;
+        $events->description = $request->description;
+        $events->location = $request->location;
+        $events->ticket = $request->ticket;
+        $events->event_date = $request->event_date;
+        $events->slug = $request->slug;
+
+          if ($request->hasFile('event_image')) {
+            $image = $request->file('event_image');
+            $filename = time().'.'.$image->getClientOriginalExtension();
+            $location = public_path('yadah/images/event/'.$filename);
+
+            Image::make($image)->save($location);
+
+            $events->event_image = $filename;
+          }
+
+        $events->save();
+
+        session()->flash('success', 'NEW EVENT: ' .strtoupper($events->title) .' has been created !');
+
+        return redirect()->back();
     }
 
     /**
@@ -56,7 +82,7 @@ class EventsController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        return view('event.show', compact(['event']));
     }
 
     /**

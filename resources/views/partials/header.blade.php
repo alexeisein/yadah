@@ -37,8 +37,6 @@
             <option value="{{ route('tag.create') }}">→ Create Blog Tag</option>
             <option value="{{ route('tag.index') }}">→ View Blog Tags</option>
             <option value="{{ route('event.create') }}">→ Create a New Event</option>
-            <option value="#">→ New Event Category</option>
-            <option value="#">→ New Event Tag</option>
             <option value="#">→ New Gallery</option>
             <option value="#">→ New Gallery Category</option>
             <option value="#">→ New Gallery Tag</option>

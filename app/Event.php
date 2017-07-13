@@ -9,14 +9,24 @@ class Event extends Model
     protected $table = 'events';
 
     protected $fillable = [
-        'title',
-        'location',
-        'date',
+      'title',
+      'location',
+      'event_date',
       'ticket',
-        'host',
-        'artists',
-        'description',
-        'slug',
-        'event_image',
+      'description',
+      'slug',
+      'event_image',
     ];
+
+    protected $dates = [
+      'event_date',
+    ];
+
+    public function getEventDateAttribute($value)
+    {
+     $calender =  \Carbon\Carbon::parse($value)->format('d, M, Y');
+     $human =  \Carbon\Carbon::parse($value)->diffForHumans();
+     return $calender .' ( ' .$human .' )';
+
+    }
 }

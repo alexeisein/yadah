@@ -21,10 +21,8 @@ class CreateEventsTable extends Migration
             $table->string('slug',100)->nullable()->unique();
             $table->string('event_image',255)->nullable();
             $table->boolean('status')->default(false);
-            $table->string('artists')->nullable();
             $table->integer('ticket')->unsigned()->nullable();
-            $table->string('host')->nullable();
-            $table->string('date')->nullable();
+            $table->date('event_date')->nullable();
             $table->timestamps();
 
         });
